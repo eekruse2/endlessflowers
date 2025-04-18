@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive - Endless Flowers of Love</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff5f5;
+            font-family: 'Georgia', serif;
+        }
+        .nav-link {
+            color: #9f7aea;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #6b46c1;
+        }
+        .archive-item {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .archive-item:hover {
+            transform: translateY(-2px);
+        }
+        .delete-btn {
+            color: #ef4444;
+            transition: color 0.3s ease;
+        }
+        .delete-btn:hover {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg py-4">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-8">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="archive.html" class="nav-link">Archive</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="trial.html" class="nav-link">Trial</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Your Archive</h1>
+        
+        <div id="archive-container" class="max-w-4xl mx-auto">
+            <!-- Archive items will be loaded here -->
+        </div>
+    </main>
+
+    <script>
+        function displayArchive() {
+            const archiveContainer = document.getElementById('archive-container');
+            const archive = JSON.parse(localStorage.getItem('archive') || '[]');
+            
+            if (archive.length === 0) {
+                archiveContainer.innerHTML = `
+                    <div class="text-center text-gray-600">
+                        <p class="text-xl">Your archive is empty</p>
+                        <p class="mt-2">Save some flowers and quotes from the home page to see them here!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            archiveContainer.innerHTML = archive.map((item, index) => `
+                <div class="archive-item">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <img src="${item.image}" alt="Archived image" class="rounded-lg shadow-lg w-full max-w-md mb-4">
+                            <p class="text-xl text-gray-800 italic mb-2">"${item.quote}"</p>
+                            <p class="text-sm text-gray-500">Saved on ${new Date(item.date).toLocaleDateString()}</p>
+                        </div>
+                        <button onclick="deleteItem(${index})" class="delete-btn ml-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteItem(index) {
+            const archive = JSON.parse(localStorage.getItem('archive') || '[]');
+            archive.splice(index, 1);
+            localStorage.setItem('archive', JSON.stringify(archive));
+            displayArchive();
+        }
+
+        // Display archive when page loads
+        displayArchive();
+    </script>
+</body>
+</html> 

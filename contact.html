@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Endless Flowers of Love</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff5f5;
+            font-family: 'Georgia', serif;
+        }
+        .nav-link {
+            color: #9f7aea;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #6b46c1;
+        }
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-input {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            width: 100%;
+            transition: border-color 0.3s ease;
+        }
+        .form-input:focus {
+            border-color: #9f7aea;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg py-4">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-8">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="archive.html" class="nav-link">Archive</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="trial.html" class="nav-link">Trial</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto">
+            <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Write What's on Your Heart and Mind... <3</h1>
+            
+            <div class="form-container">
+                <form id="contactForm" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Name (optional)</label>
+                        <input type="text" id="name" name="name" class="form-input mt-1">
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email (optional)</label>
+                        <input type="email" id="email" name="email" class="form-input mt-1">
+                    </div>
+                    
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                        <textarea id="message" name="message" rows="6" required class="form-input mt-1"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="currentImage" class="block text-sm font-medium text-gray-700">Attach Current Image (optional)</label>
+                        <input type="checkbox" id="currentImage" name="currentImage" class="mt-1">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            const attachImage = document.getElementById('currentImage').checked;
+            
+            // Get current image if needed
+            let currentImage = null;
+            if (attachImage) {
+                const homePageImage = localStorage.getItem('currentImage');
+                if (homePageImage) {
+                    currentImage = homePageImage;
+                }
+            }
+            
+            // Get existing messages or create new array
+            let messages = JSON.parse(localStorage.getItem('messages') || '[]');
+            
+            // Add new message
+            messages.push({
+                name: name || 'Anonymous',
+                email: email || '',
+                message: message,
+                image: currentImage,
+                date: new Date().toISOString()
+            });
+            
+            // Save to localStorage
+            localStorage.setItem('messages', JSON.stringify(messages));
+            
+            // Clear form
+            this.reset();
+            
+            // Show success message
+            alert('Message sent! It will appear in the archive.');
+        });
+    </script>
+</body>
+</html> 
