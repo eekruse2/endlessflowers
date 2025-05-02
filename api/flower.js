@@ -1,18 +1,18 @@
-const today = new Date();
-const start = new Date(today.getFullYear(), 0, 0);
-const dayOfYear = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-const quoteIndex = dayOfYear % quotes.length;
+// api/flower.js (SERVERLESS FUNCTION - runs on Vercel server)
+export default async function handler(req, res) {
+  const { day } = req.query;
+  const page = (parseInt(day, 10) % 50) + 1;
 
-try {
-  const res = await fetch(`/api/flower?day=${dayOfYear}`);
-  const data = await res.json();
+  const response = await fetch(`https://api.pexels.com/v1/search?query=flower&per_page=1&page=${page}`, {
+    headers: {
+      Authorization: process.env.YOUR_PEXELS_API_KEY
+    }
+  });
 
-  if (!data.photos || !data.photos.length) throw new Error("No photos found");
+  if (!response.ok) {
+    return res.status(response.status).json({ error: 'Failed to fetch from Pexels' });
+  }
 
-  const imageUrl = data.photos[0].src.large;
-  img.src = imageUrl;
-  img.alt = "Flower of the Day";
-  quoteEl.textContent = quotes[quoteIndex];
-} catch (err) {
-  console.error("Failed to load flower image:", err);
+  const data = await response.json();
+  res.status(200).json(data);
 }
