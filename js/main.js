@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       };
 
       try {
-        const res = await fetch('https://your-api-url.com/api/archive', { // Replace with your actual API domain
+        fetch('/api/archive', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(archiveEntry)
