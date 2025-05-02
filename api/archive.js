@@ -1,45 +1,35 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
+import { MongoClient } from 'mongodb';
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+const uri = process.env.MONGO_URI;
+const client = new MongoClient(uri);
+const dbName = 'endlessflowers';
+const collectionName = 'archives';
 
-// MongoDB connection (replace with your MongoDB URI)
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+export default async function handler(req, res) {
+  await client.connect();
+  const db = client.db(dbName);
+  const collection = db.collection(collectionName);
 
-// Schema
-const ArchiveSchema = new mongoose.Schema({
-  date: String,
-  imageUrl: String,
-  quote: String,
-});
-const Archive = mongoose.model('Archive', ArchiveSchema);
-
-// Save archive
-app.post('/api/archive', async (req, res) => {
-  try {
-    const entry = new Archive(req.body);
-    await entry.save();
-    res.status(201).json({ message: 'Saved!' });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to save archive.' });
+  if (req.method === 'POST') {
+    try {
+      const { imageUrl, quote, date } = req.body;
+      const result = await collection.insertOne({ imageUrl, quote, date });
+      res.status(201).json({ message: 'Saved!', id: result.insertedId });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to save archive.' });
+    }
+  } else if (req.method === 'GET') {
+    try {
+      const entries = await collection.find().sort({ date: -1 }).toArray();
+      res.status(200).json(entries);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to fetch archive.' });
+    }
+  } else {
+    res.setHeader('Allow', ['GET', 'POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-});
-
-// Fetch all archives
-app.get('/api/archive', async (req, res) => {
-  try {
-    const entries = await Archive.find().sort({ date: -1 });
-    res.json(entries);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch archive.' });
-  }
-});
-
-// Start server (port 3000 or your choice)
-app.listen(process.env.PORT || 3000, () => {
-  console.log('Archive API running');
-});
+}
 
