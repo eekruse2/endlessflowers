@@ -1,6 +1,5 @@
-import { MongoClient } from 'mongodb';
+const { MongoClient } = require('mongodb');
 
-// Cached connection for re-use between function invocations
 let cachedClient = null;
 let cachedDb = null;
 
@@ -27,7 +26,7 @@ async function connectToDatabase() {
   return { client, db };
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   try {
     const { db } = await connectToDatabase();
     const collection = db.collection(collectionName);
@@ -54,6 +53,7 @@ export default async function handler(req, res) {
     console.error('API error:', err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
+
 
 
