@@ -57,23 +57,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         imageUrl: img.src,
         quote: quoteEl.textContent
       };
+try {
+  const response = await fetch('/api/archive', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(archiveEntry)
+  });
 
-      try {
-        fetch('/api/archive', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(archiveEntry)
-        });
+  if (response.ok) {
+    alert('Saved to shared archive!');
+  } else {
+    alert('Failed to save to archive.');
+  }
+} catch (err) {
+  console.error("Error saving to archive:", err);
+  alert('Network error when saving.');
+}
 
-        if (res.ok) {
-          alert('Saved to shared archive!');
-        } else {
-          alert('Failed to save to archive.');
-        }
-      } catch (err) {
-        console.error("Error saving to archive:", err);
-        alert('Network error when saving.');
-      }
+ 
     });
   }
 });
