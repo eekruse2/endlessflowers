@@ -12,49 +12,55 @@ document.addEventListener('DOMContentLoaded', async () => {
     "“To love and be loved is to feel the sun from both sides.” – David Viscott"
   ];
 
-  try {
-    // Load flower image filenames from JSON
-    const res = await fetch('js/flowers.json');
-    const imageNames = await res.json();
+  const API_KEY = "YOUR_PEXELS_API_KEY";
+  const BASE_URL = "https://api.pexels.com/v1/search?query=flower&per_page=1&page=";
 
-    if (!imageNames.length) {
-      console.error("No image names found in flowers.json");
-      return;
-    }
+  // helper to compute ms until next local midnight
+  function msUntilMidnight() {
+    const now  = new Date();
+    const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    return next.getTime() - now.getTime();
+  }
 
-    // Determine today's index based on day of year
+  async function update() {
     const today = new Date();
     const start = new Date(today.getFullYear(), 0, 0);
     const dayOfYear = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-    const idx = dayOfYear % imageNames.length;
+    const idx = dayOfYear % 50; // Pexels API supports many pages; adjust as needed
 
-    function update() {
-      const imagePath = `flowers/${imageNames[idx]}`;
-      img.src = imagePath;
-      img.alt = `Flower of the Day`;
-      quoteEl.textContent = quotes[idx % quotes.length];
-      console.log("Showing:", imagePath, "— Quote:", quoteEl.textContent);
+    try {
+      const res = await fetch(BASE_URL + (idx + 1), {
+        headers: {
+          Authorization: API_KEY
+        }
+      });
+
+      const data = await res.json();
+
+      if (!data.photos || !data.photos.length) {
+        console.error("No flower image found for today.");
+        return;
+      }
+
+      const imageUrl = data.photos[0].src.large;
+      img.src = imageUrl;
+      img.alt = "Flower of the Day";
+      quoteEl.textContent = quotes[dayOfYear % quotes.length];
+      console.log("Showing:", imageUrl, "— Quote:", quoteEl.textContent);
+
+    } catch (err) {
+      console.error("Failed to fetch flower image from Pexels:", err);
     }
-
-    // helper to compute ms until next local midnight
-    function msUntilMidnight() {
-      const now  = new Date();
-      const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-      return next.getTime() - now.getTime();
-    }
-
-    // 1) Show today’s image immediately
-    update();
-
-    // 2) Schedule tomorrow’s update and daily refresh
-    const DAY_MS = 24 * 60 * 60 * 1000;
-    setTimeout(() => {
-      update();                             // first nightly update
-      setInterval(update, DAY_MS);          // then every 24h
-    }, msUntilMidnight());
-
-  } catch (err) {
-    console.error("Failed to load flowers.json or update image:", err);
   }
+
+  // 1) Show today’s image immediately
+  update();
+
+  // 2) Schedule tomorrow’s update and daily refresh
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  setTimeout(() => {
+    update();                             // first nightly update
+    setInterval(update, DAY_MS);          // then every 24h
+  }, msUntilMidnight());
 });
 
