@@ -19,12 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // your quotes
-  const quotes = [
-    "“Love is composed of a single soul inhabiting two bodies.” – Aristotle",
-    "“Where there is love there is life.” – Mahatma Gandhi",
-    "“Love isn’t something you find. Love is something that finds you.” – Loretta Young",
-    "“To love and be loved is to feel the sun from both sides.” – David Viscott",
-    "“You know you’re in love when you can’t fall asleep because reality is finally better than your dreams.” – Dr. Seuss"'
+ const quotes = [
   "“Love is composed of a single soul inhabiting two bodies.” – Aristotle",
   "“Where there is love there is life.” – Mahatma Gandhi",
   "“Love isn’t something you find. Love is something that finds you.” – Loretta Young",
