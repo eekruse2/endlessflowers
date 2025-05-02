@@ -46,5 +46,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     update();                             // first nightly update
     setInterval(update, DAY_MS);          // then every 24h
   }, msUntilMidnight());
+
+  // ✅ ADDITION: Save to Archive logic
+  const saveBtn = document.getElementById('save-to-archive'); // Make sure this button exists in your HTML
+
+  if (saveBtn) {
+    saveBtn.addEventListener('click', async () => {
+      const archiveEntry = {
+        date: new Date().toISOString().split('T')[0],
+        imageUrl: img.src,
+        quote: quoteEl.textContent
+      };
+
+      try {
+        const res = await fetch('https://your-api-url.com/api/archive', { // Replace with your actual API domain
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(archiveEntry)
+        });
+
+        if (res.ok) {
+          alert('Saved to shared archive!');
+        } else {
+          alert('Failed to save to archive.');
+        }
+      } catch (err) {
+        console.error("Error saving to archive:", err);
+        alert('Network error when saving.');
+      }
+    });
+  }
 });
 
