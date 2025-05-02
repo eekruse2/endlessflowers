@@ -4,13 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flower of the Day</title>
+  <!-- Serif web-font -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <h1>🌸 Flower of the Day</h1>
-  <img id="daily-flower" alt="Flower of the day" />
+  <header>
+    <h1>🌸 Flower of the Day</h1>
+  </header>
 
-  <!-- your JS runs after the DOM is parsed -->
+  <main>
+    <section class="card">
+      <img id="daily-flower" alt="Flower of the day" />
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Endless Flowers</p>
+  </footer>
+
   <script src="js/main.js"></script>
 </body>
 </html>
