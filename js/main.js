@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   ];
 
   try {
-    // Load flower image list from JSON file
-    const res = await fetch('js/flowers.json');// adjust path if needed
-    const images = await res.json();
+    // Load flower image filenames from JSON
+    const res = await fetch('js/flowers.json');
+    const imageNames = await res.json();
 
-    if (!images.length) {
-      console.error("No images found in flowers.json");
+    if (!imageNames.length) {
+      console.error("No image names found in flowers.json");
       return;
     }
 
@@ -26,13 +26,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const today = new Date();
     const start = new Date(today.getFullYear(), 0, 0);
     const dayOfYear = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-    const idx = dayOfYear % images.length;
+    const idx = dayOfYear % imageNames.length;
 
     function update() {
-      img.src = images[idx];
+      const imagePath = `flowers/${imageNames[idx]}`;
+      img.src = imagePath;
       img.alt = `Flower of the Day`;
       quoteEl.textContent = quotes[idx % quotes.length];
-      console.log("Showing:", images[idx], "— Quote:", quoteEl.textContent);
+      console.log("Showing:", imagePath, "— Quote:", quoteEl.textContent);
     }
 
     // helper to compute ms until next local midnight
