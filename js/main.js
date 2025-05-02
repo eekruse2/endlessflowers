@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     // Load flower image list from JSON file
-    const res = await fetch('flowers.json'); // adjust path if needed
+    const res = await fetch('js/flowers.json');// adjust path if needed
     const images = await res.json();
 
     if (!images.length) {
