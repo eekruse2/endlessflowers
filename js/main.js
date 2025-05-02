@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const img     = document.getElementById('daily-flower');
   const quoteEl = document.getElementById('daily-quote');
 
-  // your quotes
   const quotes = [
     "“Love is composed of a single soul inhabiting two bodies.” – Aristotle",
     "“Where there is love there is life.” – Mahatma Gandhi",
@@ -12,10 +11,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     "“To love and be loved is to feel the sun from both sides.” – David Viscott"
   ];
 
-  const API_KEY = "YOUR_PEXELS_API_KEY";
-  const BASE_URL = "https://api.pexels.com/v1/search?query=flower&per_page=1&page=";
-
-  // helper to compute ms until next local midnight
   function msUntilMidnight() {
     const now  = new Date();
     const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
@@ -26,37 +21,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     const today = new Date();
     const start = new Date(today.getFullYear(), 0, 0);
     const dayOfYear = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-    const idx = dayOfYear % 50; // Pexels API supports many pages; adjust as needed
+    const quoteIndex = dayOfYear % quotes.length;
 
     try {
-      const res = await fetch(BASE_URL + (idx + 1), {
-        headers: {
-          Authorization: API_KEY
-        }
-      });
-
+      const res = await fetch(`/api/flower?day=${dayOfYear}`);
       const data = await res.json();
 
-      if (!data.photos || !data.photos.length) {
-        console.error("No flower image found for today.");
-        return;
-      }
+      if (!data.photos || !data.photos.length) throw new Error("No photos found");
 
       const imageUrl = data.photos[0].src.large;
       img.src = imageUrl;
       img.alt = "Flower of the Day";
-      quoteEl.textContent = quotes[dayOfYear % quotes.length];
+      quoteEl.textContent = quotes[quoteIndex];
       console.log("Showing:", imageUrl, "— Quote:", quoteEl.textContent);
-
     } catch (err) {
-      console.error("Failed to fetch flower image from Pexels:", err);
+      console.error("Failed to load flower image:", err);
     }
   }
 
-  // 1) Show today’s image immediately
-  update();
+  update(); // show immediately
 
-  // 2) Schedule tomorrow’s update and daily refresh
   const DAY_MS = 24 * 60 * 60 * 1000;
   setTimeout(() => {
     update();                             // first nightly update
