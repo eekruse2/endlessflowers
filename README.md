@@ -10,7 +10,7 @@ terminal to add and commit changes:
 ##overides local with git code
 
 git fetch origin
-[NEEDS SEPARATE LINE]
+
 git reset --hard origin/main
 
 ##dont need this if i overide like above
