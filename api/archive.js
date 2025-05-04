@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb'); // ✅ Added ObjectId
 
 let cachedClient = null;
 let cachedDb = null;
@@ -38,17 +38,13 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Missing fields in request body.' });
       }
 
-      // Check for existing entry with the same date and quote
-const existing = await collection.findOne({ date, quote });
+      // ✅ Check for duplicates before inserting
+      const existing = await collection.findOne({ date, quote });
+      if (existing) {
+        return res.status(200).json({ message: 'Already saved.' });
+      }
 
-if (existing) {
-  return res.status(200).json({ message: 'Already saved.' });
-}
-
-// Insert new archive entry
-const result = await collection.insertOne({ imageUrl, quote, date });
-return res.status(201).json({ message: 'Saved!', id: result.insertedId });
-
+      const result = await collection.insertOne({ imageUrl, quote, date });
       return res.status(201).json({ message: 'Saved!', id: result.insertedId });
     }
 
@@ -57,7 +53,24 @@ return res.status(201).json({ message: 'Saved!', id: result.insertedId });
       return res.status(200).json(entries);
     }
 
-    res.setHeader('Allow', ['GET', 'POST']);
+    // ✅ NEW: DELETE by ID
+    if (req.method === 'DELETE') {
+      const { id } = req.query;
+
+      if (!id) {
+        return res.status(400).json({ error: 'Missing archive ID.' });
+      }
+
+      const result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+      if (result.deletedCount === 1) {
+        return res.status(200).json({ message: 'Deleted.' });
+      } else {
+        return res.status(404).json({ error: 'Entry not found.' });
+      }
+    }
+
+    res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   } catch (err) {
     console.error('API error:', err);
