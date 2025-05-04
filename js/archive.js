@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const container = document.getElementById('archive-container');
 
   try {
-    const res = await fetch('https://your-api-url.com/api/archive');
+    const res = await fetch('/api/archive');
     const archive = await res.json();
 
     if (!archive.length) {
