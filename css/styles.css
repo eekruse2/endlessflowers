@@ -111,3 +111,57 @@ button.cancel {
   background-color: #d32f2f;
 }
 
+
+/* 🌑 Elegant Moody Background */
+body {
+  background-color: #1e1b1b; /* rich espresso brown */
+  color: #f4f0ed;            /* soft ivory */
+  font-family: 'Georgia', serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* 🌸 Centered Content Card */
+.card {
+  max-width: 600px;
+  margin: 5rem auto;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.035); /* faint overlay */
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* 🌸 Flower Image Styling */
+#daily-flower {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.07);
+}
+
+/* 📝 Quote Styling */
+#daily-quote {
+  font-family: 'Cardo', serif;
+
+  font-size: 1.25rem;
+  margin: 1.5rem 0;
+  color: #e4cfc7; /* warm muted rose */
+}
+
+/* 💾 Save Button Styling */
+#save-to-archive {
+  background-color: #6e2f2f; /* deep red-brown */
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#save-to-archive:hover {
+  background-color: #8c3b3b;
+}
+
+
