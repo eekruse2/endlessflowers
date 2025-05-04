@@ -1,3 +1,5 @@
+/* ilike this color #6e2f2f;  deep red-brown */ 
+
 .modal {
   position: fixed;
   top: 0;
@@ -145,10 +147,10 @@ body {
 /* 📝 Quote Styling */
 #daily-quote {
   font-family: 'Cardo', serif;
-
   font-size: 1.25rem;
   margin: 1.5rem 0;
-  color: #e4cfc7; /* warm muted rose */
+  color: #6e2f2f;
+  
 }
 
 /* 💾 Save Button Styling */
