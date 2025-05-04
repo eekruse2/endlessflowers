@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const container = document.getElementById('archive-container');
 
+  // ✅ Setup modal elements and state
+  const modal = document.getElementById('delete-modal');              // Modal container
+  const confirmBtn = document.getElementById('confirm-delete');       // "Yes, delete" button
+  const cancelBtn = document.getElementById('cancel-delete');         // "Cancel" button
+  let pendingDelete = null;                                           // Will store { id, item }
+
   try {
     const res = await fetch('/api/archive');
     const archive = await res.json();
@@ -11,37 +17,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     archive.forEach(entry => {
-  const item = document.createElement('div');
-  item.style.marginBottom = '2rem';
+      const item = document.createElement('div');
+      item.style.marginBottom = '2rem';
 
-  const img = document.createElement('img');
-  img.src = entry.imageUrl;
-  img.alt = "Archived Flower";
-  img.style.maxWidth = "300px";
+      const img = document.createElement('img');
+      img.src = entry.imageUrl;
+      img.alt = "Archived Flower";
+      img.style.maxWidth = "300px";
 
-  const quote = document.createElement('p');
-  quote.textContent = entry.quote;
+      const quote = document.createElement('p');
+      quote.textContent = entry.quote;
 
-  const date = document.createElement('small');
-  date.textContent = `Saved on: ${entry.date}`;
+      const date = document.createElement('small');
+      date.textContent = `Saved on: ${entry.date}`;
 
-  // ✅ Add delete button
-  const deleteBtn = document.createElement('button');
-  deleteBtn.textContent = '🗑️ Delete';
-  deleteBtn.style.marginTop = '0.5rem';
-  deleteBtn.style.display = 'block';
+      // ✅ Add delete button
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '🗑️ Delete';
+      deleteBtn.style.marginTop = '0.5rem';
+      deleteBtn.style.display = 'block';
 
-  deleteBtn.addEventListener('click', async () => {
-    const confirmed = confirm('Are you sure you want to delete this archived flower?');
+      // ✅ When user clicks delete, show the modal and store this entry
+      deleteBtn.addEventListener('click', () => {
+        pendingDelete = { id: entry._id, item };   // Save reference for later
+        modal.classList.remove('hidden');          // Show the modal
+      });
 
-    if (confirmed) {
+      // Append all elements to the archive item container
+      item.appendChild(img);
+      item.appendChild(quote);
+      item.appendChild(date);
+      item.appendChild(deleteBtn); // ✅ add delete button
+
+      // Append the whole item to the archive container
+      container.appendChild(item);
+    });
+
+    // ✅ Confirm delete: send DELETE request and remove item from page
+    confirmBtn.addEventListener('click', async () => {
+      if (!pendingDelete) return;
+
       try {
-        const response = await fetch(`/api/archive?id=${entry._id}`, {
+        const response = await fetch(`/api/archive?id=${pendingDelete.id}`, {
           method: 'DELETE'
         });
 
         if (response.ok) {
-          item.remove(); // ✅ remove from page if deletion succeeds
+          pendingDelete.item.remove(); // Remove element from page
         } else {
           alert('Failed to delete entry.');
         }
@@ -49,22 +71,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Error deleting entry:', err);
         alert('Network error while deleting.');
       }
-    }
-  });
 
-  // Append all elements to the archive item container
-  item.appendChild(img);
-  item.appendChild(quote);
-  item.appendChild(date);
-  item.appendChild(deleteBtn); // ✅ add button to page
+      modal.classList.add('hidden'); // Hide modal
+      pendingDelete = null;          // Reset delete state
+    });
 
-  // Append item to the main container
-  container.appendChild(item);
-});
+    // ✅ Cancel delete: hide modal and clear state
+    cancelBtn.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      pendingDelete = null;
+    });
 
   } catch (err) {
     console.error('Failed to load archive:', err);
     container.innerHTML = "<p>Error loading archive.</p>";
   }
 });
+
 
