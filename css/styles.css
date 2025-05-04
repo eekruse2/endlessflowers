@@ -46,3 +46,68 @@ button.cancel {
   border-radius: 4px;
   cursor: pointer;
 }
+
+
+
+
+/* 🌸 Grid Layout for Archive */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  justify-items: center;
+}
+
+/* 🌸 Individual Archive Cards */
+.grid-container > div {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.grid-container > div:hover {
+  transform: translateY(-4px);
+}
+
+/* 🌸 Archive Card Image */
+.grid-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* 🌸 Quote and Date */
+.grid-container p {
+  margin: 0.75rem 0 0.5rem;
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+.grid-container small {
+  display: block;
+  color: #666;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 🌸 Delete Button */
+.grid-container button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.grid-container button:hover {
+  background-color: #d32f2f;
+}
+
