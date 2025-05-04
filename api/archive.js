@@ -38,7 +38,17 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: 'Missing fields in request body.' });
       }
 
-      const result = await collection.insertOne({ imageUrl, quote, date });
+      // Check for existing entry with the same date and quote
+const existing = await collection.findOne({ date, quote });
+
+if (existing) {
+  return res.status(200).json({ message: 'Already saved.' });
+}
+
+// Insert new archive entry
+const result = await collection.insertOne({ imageUrl, quote, date });
+return res.status(201).json({ message: 'Saved!', id: result.insertedId });
+
       return res.status(201).json({ message: 'Saved!', id: result.insertedId });
     }
 
