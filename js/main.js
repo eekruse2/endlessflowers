@@ -5,11 +5,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const quoteEl = document.getElementById('daily-quote');
 
   const quotes = [
-    "“Love is composed of a single soul inhabiting two bodies.” – Aristotle",
-    "“Where there is love there is life.” – Mahatma Gandhi",
-    "“Love isn’t something you find. Love is something that finds you.” – Loretta Young",
-    "“To love and be loved is to feel the sun from both sides.” – David Viscott",
-      "“You know you’re in love when you can’t fall asleep because reality is finally better than your dreams.” – Dr. Seuss",
+  "“Love is composed of a single soul inhabiting two bodies.” – Aristotle",
+  "“Where there is love there is life.” – Mahatma Gandhi",
+  "“Love isn’t something you find. Love is something that finds you.” – Loretta Young",
+  "“To love and be loved is to feel the sun from both sides.” – David Viscott",
+  "“You know you’re in love when you can’t fall asleep because reality is finally better than your dreams.” – Dr. Seuss",
   "“The best thing to hold onto in life is each other.” – Audrey Hepburn",
   "“Love recognizes no barriers.” – Maya Angelou",
   "“In dreams and in love there are no impossibilities.” – János Arany",
@@ -54,8 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   "“Love is not a matter of counting the years, but making the years count.” – Michelle St. Amand",
   "“Love is seeing yourself in someone else, someone else in yourself.” – Oscar Wilde",
   "“Love is the light that brightens every heart that sees it.” – unknown"
-    
-  ];
+];
 
   function msUntilMidnight() {
     const now  = new Date();
@@ -98,10 +97,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (saveBtn) {
     saveBtn.addEventListener('click', async () => {
+      const messageInput = document.getElementById('archive-message'); // Get the textarea
       const archiveEntry = {
         date: new Date().toISOString().split('T')[0],
         imageUrl: img.src,
         quote: quoteEl.textContent
+        message: messageInput ? messageInput.value : '' // ← ADD THIS LINE
       };
 try {
   const response = await fetch('/api/archive', {
