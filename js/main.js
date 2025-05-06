@@ -101,8 +101,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const archiveEntry = {
         date: new Date().toISOString().split('T')[0],
         imageUrl: img.src,
-        quote: quoteEl.textContent
-        message: messageInput ? messageInput.value : '' // ← ADD THIS LINE
+        quote: quoteEl.textContent,
+        messageEl: messageInput ? messageInput.value : '' // ← ADD THIS LINE
       };
 try {
   const response = await fetch('/api/archive', {
