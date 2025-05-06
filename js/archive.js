@@ -28,11 +28,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const quote = document.createElement('p');
       quote.textContent = entry.quote;
       if (entry.message && entry.message.trim()) {
-        const message = document.createElement('p');
-        message.textContent = `💬 ${entry.message}`;
-        message.style.fontStyle = 'italic';
-        message.style.marginTop = '0.25rem';
-        item.appendChild(message); // ✅ Append message to item
+        const messageEl = document.createElement('p');
+        messageEl.textContent = `💬 ${entry.message}`;
+        messageEl.style.fontStyle = 'italic';
+        messageEl.style.marginTop = '0.25rem';
+        item.appendChild(messageEl); // ✅ Append message to item
       }
       const date = document.createElement('small');
       date.textContent = `Saved on: ${entry.date}`;
