@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const quote = document.createElement('p');
       quote.textContent = entry.quote;
+      item.appendChild(quote); // ✅ Don't forget this
       if (entry.message && entry.message.trim()) {
         const messageEl = document.createElement('p');
         messageEl.textContent = `💬 ${entry.message}`;
