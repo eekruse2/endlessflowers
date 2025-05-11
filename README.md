@@ -1,19 +1,14 @@
-# Endless Flowers of Love
+# Endless Flowers
 
-A beautiful website to share flowers and love quotes with your special someone.
+Everyday a new flower image and love quote fill an observer with feelings, thoughts... or maybe nothing. This special someone can archive what resonated with them and leave an optional message so that down the line when they reminise while scrolling through the archvive they can know what struck them.
+
+Images pulled Pexels free API. 
 
 ## Website URL
 https://eekruse2.github.io/endlessflowers/
 
-terminal to add and commit changes:
-
-##overides local with git code
-
-git fetch origin
-
-git reset --hard origin/main
-
-##dont need this if i overide like above
-git add .
-git commit -m "Your update message"
-git push origin main
+Features to come:
+- Logins
+- User image choice. For example: "Night sky" instead of "flowers"
+- User quote choice. For example: "hard work" isntead of "love"
+- User feedback button
